@@ -1,7 +1,6 @@
 import React from 'react'
 
 function NavBar({puppies, displayPup}) {
-  console.log(displayPup)
 
   return (
     <div id="dog-bar">

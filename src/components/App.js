@@ -16,13 +16,30 @@ function App() {
     setClickedPuppy(() => puppy)
   }
 
+  function handleButtonClick () { 
+    const newPuppy = {...clickedPuppy, isGoodDog: !clickedPuppy.isGoodDog}
+    setClickedPuppy(newPuppy)
+
+    fetch(`http://localhost:3001/pups/${clickedPuppy.id}`, {
+      method: "PATCH",
+      headers: { 
+        "Content-Type": "application/json",
+      }, 
+      body: JSON.stringify({clickedPuppy})
+    })
+    .then(response => response.json())
+    .then(newData => console.log(newData))
+  }
+
+
+
   return (
     <div className="App">
       <div id="filter-div">
         <button id="good-dog-filter">Filter good dogs: OFF</button>
       </div>
         <NavBar puppies={puppies} displayPup={displayPup} />
-        <DisplayInfo clickedPuppy={clickedPuppy}/>
+        <DisplayInfo clickedPuppy={clickedPuppy} handleButtonClick={handleButtonClick}/>
     </div>
   );
 }
