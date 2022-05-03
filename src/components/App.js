@@ -6,10 +6,14 @@ function App() {
   const [puppies, setPuppies] = useState([])
   const [clickedPuppy, setClickedPuppy] = useState("")
 
-  useEffect(() => { 
+  function getPuppies() { 
     fetch("http://localhost:3001/pups")
     .then(response => response.json())
     .then(pups => setPuppies(pups))
+  }
+
+  useEffect(() => { 
+    getPuppies()
   }, [])
 
   function displayPup (puppy) { 
@@ -17,21 +21,18 @@ function App() {
   }
 
   function handleButtonClick () { 
-    const newPuppy = {...clickedPuppy, isGoodDog: !clickedPuppy.isGoodDog}
-    setClickedPuppy(newPuppy)
-
     fetch(`http://localhost:3001/pups/${clickedPuppy.id}`, {
       method: "PATCH",
       headers: { 
         "Content-Type": "application/json",
       }, 
-      body: JSON.stringify({clickedPuppy})
+      body: JSON.stringify({isGoodDog: !clickedPuppy.isGoodDog})
     })
     .then(response => response.json())
-    .then(newData => console.log(newData))
+    .then(newData => { 
+      getPuppies()
+      setClickedPuppy(newData)})
   }
-
-
 
   return (
     <div className="App">
